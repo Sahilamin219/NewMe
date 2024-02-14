@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  proxy:
+    image: haproxy
+    ports:
+      - 81:80
+      - 443:443
+    volumes:
+      - ./haproxy:/usr/local/etc/haproxy
+
+  web0:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8000"
+    volumes:
+      - .:/usr/src/myapp
+    depends_on:
+      - proxy
+
+  web1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8000"
+    volumes:
+      - .:/usr/src/myapp
+    depends_on:
+      - proxy
+
+  web2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/usr/src/myapp
+    depends_on:
+      - proxy
